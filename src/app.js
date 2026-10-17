@@ -1,6 +1,7 @@
 // UI code: connects the quiz logic (quiz.js) to the page (index.html).
 
 const QUESTION_TIME_LIMIT = 15;
+const BEST_SCORE_KEY = "dev-days-quiz-best-score";
 const state = {
   quiz: createQuiz([]),
   timerId: null,
@@ -18,7 +19,25 @@ const optionsList = document.getElementById("options");
 const feedbackText = document.getElementById("feedback");
 const nextButton = document.getElementById("next-btn");
 const scoreText = document.getElementById("score-text");
+const bestScoreText = document.getElementById("best-score-text");
 const gradeText = document.getElementById("grade-text");
+
+function getAndSaveBestScore(currentScore) {
+  try {
+    const storedScore = window.localStorage.getItem(BEST_SCORE_KEY);
+    const parsedScore = storedScore === null ? null : Number(storedScore);
+    const bestScore =
+      Number.isInteger(parsedScore) && parsedScore >= 0 ? parsedScore : null;
+
+    if (!isNewBestScore(currentScore, bestScore)) return bestScore;
+
+    window.localStorage.setItem(BEST_SCORE_KEY, String(currentScore));
+    return currentScore;
+  } catch (error) {
+    console.warn("Unable to access the saved best score.", error);
+    return null;
+  }
+}
 
 function stopQuestionTimer() {
   if (state.timerId !== null) {
@@ -120,6 +139,18 @@ function selectAnswer(selectedIndex, selectedButton) {
   nextButton.focus();
 }
 
+function handleAnswerShortcut(event) {
+  if (event.repeat || quizScreen.hidden || state.questionResolved) return;
+  if (!/^[1-4]$/.test(event.key)) return;
+
+  const selectedIndex = Number(event.key) - 1;
+  const selectedButton = optionsList.querySelectorAll("button")[selectedIndex];
+  if (!selectedButton || selectedButton.disabled) return;
+
+  event.preventDefault();
+  selectAnswer(selectedIndex, selectedButton);
+}
+
 function nextQuestion() {
   stopQuestionTimer();
   state.quiz = advanceQuestion(state.quiz);
@@ -134,11 +165,17 @@ function showResults() {
   stopQuestionTimer();
   const total = state.quiz.questions.length;
   const percentage = calculatePercentage(state.quiz.score, total);
+  const bestScore = getAndSaveBestScore(state.quiz.score);
   scoreText.textContent = `You scored ${state.quiz.score} out of ${total} (${percentage}%)`;
+  bestScoreText.textContent =
+    bestScore === null
+      ? "Best score unavailable because local storage could not be accessed."
+      : `Best score: ${bestScore} out of ${total}`;
   gradeText.textContent = `Grade: ${getGrade(percentage)}`;
   showScreen(resultScreen);
 }
 
+document.addEventListener("keydown", handleAnswerShortcut);
 document.getElementById("start-btn").addEventListener("click", startQuiz);
 document.getElementById("restart-btn").addEventListener("click", startQuiz);
 nextButton.addEventListener("click", nextQuestion);

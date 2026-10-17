@@ -12,6 +12,7 @@ const {
   calculatePercentage,
   getGrade,
   getFeedbackMessage,
+  isNewBestScore,
   formatTimeLeft,
 } = require("../src/quiz.js");
 
@@ -149,6 +150,22 @@ test("getFeedbackMessage returns a fallback when grade is unknown", () => {
 
 test("getFeedbackMessage returns a fallback when grade is null", () => {
   assert.equal(getFeedbackMessage(null), "Keep practicing!");
+});
+
+test("isNewBestScore returns true when there is no previous best", () => {
+  assert.equal(isNewBestScore(0, null), true);
+});
+
+test("isNewBestScore returns true when current score is higher", () => {
+  assert.equal(isNewBestScore(8, 7), true);
+});
+
+test("isNewBestScore returns false when current score ties the best", () => {
+  assert.equal(isNewBestScore(7, 7), false);
+});
+
+test("isNewBestScore returns false when current score is lower", () => {
+  assert.equal(isNewBestScore(6, 7), false);
 });
 
 test("formatTimeLeft formats positive seconds when given 15", () => {
