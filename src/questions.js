@@ -36,6 +36,26 @@ const QUESTIONS = [
     ],
     answer: 1,
   },
+  {
+    question: "Where are GitHub Actions workflow files stored?",
+    options: ["actions/", ".github/actions/", "workflows/", ".github/workflows/"],
+    answer: 3,
+  },
+  {
+    question: "Which workflow key defines the events that trigger it?",
+    options: ["on", "run", "jobs", "uses"],
+    answer: 0,
+  },
+  {
+    question: "What does `needs` specify for a GitHub Actions job?",
+    options: [
+      "The runner operating system",
+      "The workflow trigger",
+      "Jobs that must complete first",
+      "The action version to use",
+    ],
+    answer: 2,
+  },
 ];
 
 // Lets Node.js tests load this file. Browsers ignore this block.
