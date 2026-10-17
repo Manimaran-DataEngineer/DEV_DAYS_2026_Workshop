@@ -81,6 +81,10 @@ function getFeedbackMessage(grade) {
   return "Keep practicing!";
 }
 
+function isNewBestScore(current, best) {
+  return best === null || current > best;
+}
+
 function formatTimeLeft(seconds) {
   if (typeof seconds !== "number" || !Number.isFinite(seconds)) {
     throw new TypeError("seconds must be a finite number");
@@ -100,6 +104,7 @@ if (typeof module !== "undefined" && module.exports) {
     calculatePercentage,
     getGrade,
     getFeedbackMessage,
+    isNewBestScore,
     formatTimeLeft,
   };
 }
