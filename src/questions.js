@@ -56,6 +56,16 @@ const QUESTIONS = [
     ],
     answer: 2,
   },
+  {
+    question: "What does forking a GitHub repository create?",
+    options: [
+      "A new issue in the original repository",
+      "A release tag in the original repository",
+      "A protected branch in the original repository",
+      "A copy of the repository under your account",
+    ],
+    answer: 3,
+  },
 ];
 
 // Lets Node.js tests load this file. Browsers ignore this block.
