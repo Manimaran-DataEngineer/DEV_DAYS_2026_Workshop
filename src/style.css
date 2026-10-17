@@ -57,6 +57,16 @@ h2 {
   margin: 0;
 }
 
+.timer {
+  margin: 0 0 0.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer.is-low {
+  color: var(--wrong);
+  font-weight: 700;
+}
+
 #options {
   list-style: none;
   padding: 0;
